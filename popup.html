@@ -12,16 +12,19 @@
     <div class="container">
         <h2>Schedule WhatsApp Message</h2>
         <form id="msgForm">
-            <input type="text" id="phone" placeholder="Phone number (with country code)" required />
+            <input type="text" id="phone" placeholder="Phone number" required />
             <input type="text" id="message" placeholder="Your message" required />
             <input type="time" id="time" required />
             <div class="button-group">
                 <button type="submit" id="send">Schedule</button>
                 <button type="button" id="reset">Reset</button>
                 <button type="button" id="reload">Reload</button>
+                <button type="button" id="add">+</button>
             </div>
         </form>
         <div id="status"></div>
+        <div id="countdown"></div>
+
     </div>
 
     <script src="popup.js"></script>
