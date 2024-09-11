@@ -1,50 +1,61 @@
+// Store scheduled messages to prevent duplicate scheduling
+let scheduledMessages = {};
+
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    const { phone, message, hour, minute } = request;
+    const { phone, message, hour, minute, action } = request;
 
-    // Create a date object for the scheduled time
-    const now = new Date();
-    const scheduledTime = new Date();
-    scheduledTime.setHours(hour, minute, 0, 0);
+    // Check if the action is to schedule a message
+    if (action === "scheduleMessage") {
+        const now = new Date();
+        const scheduledTime = new Date();
+        scheduledTime.setHours(hour, minute, 0, 0);
 
-    // Check if the scheduled time is in the future
-    const timeDifference = scheduledTime - now;
+        // Create a unique key for each phone + message combo
+        const scheduleKey = `${phone}_${hour}:${minute}`;
 
-    if (timeDifference > 0) {
+        // Check if this message is already scheduled
+        if (scheduledMessages[scheduleKey]) {
+            sendResponse({ status: "already_scheduled" });
+            return true;
+        }
+
+        // Set the message as scheduled
+        scheduledMessages[scheduleKey] = { phone, message, time: scheduledTime };
+
+        // Show an orange badge indicating the extension is active
+        chrome.action.setBadgeBackgroundColor({ color: "#FFA500" }); // Orange color
+        chrome.action.setBadgeText({ text: "●" }); // Display a small dot
+
         setTimeout(() => {
             try {
                 const whatsappUrl = `https://web.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(message)}`;
-
-                // Log the attempt to create the WhatsApp tab
-                console.log(`Opening WhatsApp Web: ${whatsappUrl}`);
 
                 // Create a new tab for WhatsApp Web
                 chrome.tabs.create({ url: whatsappUrl }, function(tab) {
                     if (chrome.runtime.lastError) {
                         console.error("Tab Creation Error: ", chrome.runtime.lastError.message);
                         sendResponse({ status: "error", message: "Failed to open WhatsApp Web." });
+                        chrome.action.setBadgeText({ text: "" }); // Clear the badge
                     } else {
-                        console.log("WhatsApp Web tab created successfully.");
-
-                        // Inject content script to simulate the send button click after loading
+                        // Simulate sending the message
                         chrome.scripting.executeScript({
                             target: { tabId: tab.id },
-                            function: simulateSendMessage
+                            function: simulateSendMessage, // Use the function directly
                         });
 
                         sendResponse({ status: "success" });
+                        chrome.action.setBadgeText({ text: "" }); // Clear the badge after message is sent
                     }
                 });
             } catch (error) {
                 console.error("Error while opening WhatsApp Web: ", error);
                 sendResponse({ status: "error", message: "An error occurred while trying to open WhatsApp Web." });
+                chrome.action.setBadgeText({ text: "" }); // Clear the badge
             }
-        }, timeDifference);
-    } else {
-        console.warn("Scheduled time is in the past.");
-        sendResponse({ status: "error", message: "Scheduled time is in the past." });
+        }, scheduledTime - now);
     }
 
-    return true; // Indicate that the response is asynchronous
+    return true;
 });
 
 // Function to be injected that simulates the send button click
