@@ -1,4 +1,4 @@
-# WhatsApp Scheduler Chrome Extension
+# The WhatsApp Scheduler Chrome Extension
 
 ## Overview
 
@@ -8,7 +8,7 @@ This Chrome extension allows users to schedule WhatsApp messages by opening What
 
 - **Schedule Messages**: Enter a phone number, message, and time to schedule a message for WhatsApp Web.
 - **Automatic Send**: Once the scheduled time is reached, the message is automatically sent by simulating a button click on WhatsApp Web.
-- **Reset Form**: Clear all input fields with a single click.
+- **Reset Form**: Clear all input fields with just a single click.
 - **Reload Extension**: Start fresh by reloading the extension interface.
 
 ---
@@ -74,7 +74,7 @@ This Chrome extension allows users to schedule WhatsApp messages by opening What
 - **popup.html**: The user interface for the extension, where users input message details.
 - **popup.js**: Contains JavaScript logic to handle form submissions and reset/reload actions.
 - **background.js**: Handles scheduling logic, opening WhatsApp Web, and automating message sending.
-- **content.js**: Injects code into WhatsApp Web to simulate clicking the "Send" button.
+- **content.js**: To Inject code into WhatsApp Web to simulate clicking the "Send" button.
 
 ---
 
