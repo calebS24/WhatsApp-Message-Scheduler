@@ -100,3 +100,14 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 - **pywhatkit**: For providing WhatsApp Web interaction functionality.
 - **Google Chrome Extensions**: For making it possible to build this extension.
+
+---
+
+## Contact
+
+For any queries or suggestions, please feel free to reach out:
+
+- **Name**: Caleb Shaji Varghese  
+- **Email**: calebsvarghese@gmail.com  
+- **GitHub**: [/calebS24](https://github.com/calebS24)
+- **LinkedIn**: [/calebsv](https://www.linkedin.com/in/calebsv)
